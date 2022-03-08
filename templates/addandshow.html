@@ -1,0 +1,86 @@
+{%extends 'base.html' %}
+
+{% block content%}
+<div class="container">
+    <div class="row">
+    
+        <div class="col-sm-4">
+    
+        <h4 class="text-center alert alert-success mt-3">Add New Student</h4>
+        <form action="" method="POST">
+
+            {%csrf_token%}
+            {{form.as_p}}
+            {%if user.is_authenticated %}
+            <button class="btn btn-success" style="align-items: center;width:340px;">Registeration</button>
+            {%else%}
+            <a href="userlogin" class="btn btn-danger" style="color:white;">Login Required for Student Registration</></a>
+
+            {%endif%}
+        
+          </form>
+
+        </div>
+        
+       
+
+
+        <div class="col-sm-7 offset-1">
+            <h4 class="text-center alert alert-success mt-3">View Student Information</h4>
+                {% if stu %}
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Password</th>
+                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {%for i in stu%} 
+                      <tr>
+                        <th scope="row">{{i.id}}</th>
+                        <td>{{i.name}}</td>
+                        <td>{{i.email}}</td>
+                        <td>{{i.password}}</td>
+                        <td>
+
+                          {%if user.is_authenticated %}
+                            <a href="update={{i.id}}" class="btn btn-success btn-sm" style="color: white;">Edit</a>
+                            <form action="delete/{{i.id}}" method="POST" class="d-inline">{% csrf_token %}
+                                
+                              <button class="btn btn-danger">Del</button>
+                              
+                          </form>
+                         
+                            {%else%}
+                          
+                         <a href="userlogin" class="btn btn-danger" style="color:white;">Login Required for edit and Delete</></a>
+
+                          {%endif%}
+                           
+                        </td>
+                      </tr>
+                    {%endfor%}
+                     
+                    </tbody>
+                  </table>
+
+                {%else%}
+                <h6 class="text-center alert alert-danger mt-5">Opps! No Records</h6>
+                {%endif%}
+        </div>
+    
+    </div>
+</div>
+<div class="container mt-3">
+{%for msg in messages%}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <strong>Message : </strong> {{msg}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{%endfor%}
+</div>
+{%endblock content%}
